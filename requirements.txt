@@ -3,5 +3,4 @@ cs50
 Flask
 Flask-Session
 werkzeug
-myapp
-gunicorn
+
