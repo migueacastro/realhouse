@@ -1,0 +1,128 @@
+{% extends "layout2.html" %}
+
+{% block main %}
+    <script src="https://unpkg.com/js-image-zoom@0.7.0/js-image-zoom.js" type="application/javascript"></script>
+    <div class="popup" id="popup-1">
+        <div class="overlay"></div>
+        <div class="content">
+            <div class="close-btn" onclick="togglePopup()">&times;</div>
+            <h1>Contact Dealer</h1>
+            <p>
+                Username: {{ username }}<br>
+                Email: {{ userdata.email }}
+            </p>
+        </div>
+    </div>
+    <div class="py-5 text-center querysection rounded w-auto" style="min-height: 100vh;">
+        <div style="min-height: 80vh;" class="mb-5">
+            <p class="text-start mx-5" style="text-transform: capitalize;">
+                {{ deal.placetype }}s <i class="fa-solid fa-arrow-right mx-2"></i>{{ deal.name }}
+            </p>
+
+            <div class="mx-auto deal-container">
+                <div class="col-md-6">
+                    <div id="imageABC" class="mt-5 mb-3 deal-photo">
+                        <img id="magnifying-img" class="deal-photo" src="/static/uploads/{{ deal.image }}" alt="image">
+                    </div>
+                    <div id="imageSSSSS">
+                        {% for image in images %}
+                            <img class="p-3" style="border-radius: 4vh;" src="/static/uploads/{{ image.image_path }}" alt="other images" width="100" height="100">
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mt-5 mb-5 text-start deal-text">
+                        <h1 class="mb-3">{{ deal.name }}</h1>
+                        <p>
+                            by {{ username }}
+                        </p>
+                        <div style="display: flex; flex-direction: row;" class="deal-text">
+                            {% if deal.rooms > 0 %}
+                                <i class="fa-solid fa-bed deal-icon"></i>
+                                <p class="deal-icon-number">{{ deal.rooms }}</p>
+                            {% endif %}
+                            {% if deal.bathrooms > 0 %}
+                                <i class="fa-solid fa-bath deal-icon"></i>
+                                <p class="deal-icon-number">{{ deal.bathrooms }}</p>
+                            {% endif %}
+                            <i class="fa-solid fa-stairs deal-icon"></i>
+                            <p class="deal-icon-number">{{ deal.stories }}</p>
+                            <i class="fa-solid fa-layer-group deal-icon"></i>
+                            <p class="deal-icon-number">{{ deal.squaremeters }} m2</p>
+                        </div>
+                        <div style="display: flex;" class="deal-text">
+                            {% if session %}
+                                <a class="btn btn-3 deal-button" onclick="togglePopup()" style="width: fit-content;">
+                                    Contact Dealer
+                                </a>
+                            {% else %}
+                                <a class="btn btn-3 deal-button" href="/login" style="width: fit-content;">
+                                    Contact Dealer
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class=>
+                        <p class="text-start deal-text">
+                            {{ deal.description }}
+                        </p>
+                    </div>
+                    <div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="text-center mt-5 mb-2">
+                <h1>Other deals</h1>
+            </div>
+        </div>
+
+        {% include "listing.html" %}
+
+    </div>
+    <script>
+        var imageABC = document.getElementById('imageABC');
+
+        var imageSSSSS = document.getElementById('imageSSSSS').getElementsByTagName('img');
+
+        for (var i = 0; i < imageSSSSS.length; i++) {
+
+            imageSSSSS[i].addEventListener('click', full_image);
+
+        }
+
+        function full_image() {
+
+            var ImageSRC = this.getAttribute('src');
+
+            imageABC.innerHTML = "<img id='magnifying-img' src=" + ImageSRC + " class='deal-photo'>";
+            toggleZoom();
+
+
+        }
+
+        function togglePopup() {
+            document.getElementById("popup-1").classList.toggle("active")
+        }
+
+        if (!window.matchMedia("(max-width: 872px)").matches) {
+            var options = {
+                width: 400,
+                height: 250,
+                zoomWidth: 500,
+                offset: {
+                    vertical: 0,
+                    horizontal: 0
+                },
+                scale: 1.5
+            }
+        }
+
+    // Props to malaman's js-image-zoom library
+        function toggleZoom() {
+            new ImageZoom(document.getElementById("imageABC"), options);
+        }
+        toggleZoom();
+    </script>
+{% endblock %}
